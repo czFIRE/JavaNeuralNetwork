@@ -4,24 +4,24 @@ import java.util.Arrays;
 
 public class LabelPoint {
 
-    private int label;
-    private int[] features;
+    private int[][] label;
+    private int[][] features;
 
-    LabelPoint(int label, int[] features) {
+    LabelPoint(int [][] label, int[][] features) {
         this.label = label;
         this.features = features;
     }
 
-    public int getLabel() {
+    public int[][] getLabel() {
         return label;
     }
 
-    public int[] getFeatures() {
+    public int[][] getFeatures() {
         return features;
     }
 
     @Override
     public String toString() {
-        return "Labeled point: " + label + " - " + Arrays.toString(features);
+        return "Labeled point: " + Arrays.deepToString(label) + " - " + Arrays.deepToString(features);
     }
 }
