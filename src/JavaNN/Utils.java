@@ -107,6 +107,29 @@ public class Utils {
 
     }
 
+    public static void meanColumn (double[][] matrix, double[][] mat) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                mat[i][0] += matrix[i][j];
+            }
+            mat[i][0] /= cols;
+        }
+    }
+
+    public static void addVectorToMat (double[][] mat1, double[][] vec, double[][] mat) {
+        int rows = mat1.length;
+        int cols = mat1[0].length;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                mat[i][j] = mat1[i][j] + vec[i][0];
+            }
+        }
+    }
+
     public static void subtractMats (double[][] mat1, double[][] mat2, double[][] mat) {
         int rows = mat1.length;
         int cols = mat1[0].length;
@@ -116,7 +139,6 @@ public class Utils {
                 mat[i][j] = mat1[i][j] - mat2[i][j];
             }
         }
-
     }
 
     public static void subtractMats (double[][] mat1, int[][] mat2, double[][] mat) {
@@ -128,10 +150,9 @@ public class Utils {
                 mat[i][j] = mat1[i][j] - mat2[i][j];
             }
         }
-
     }
 
-    public static double[][] elementWiseMultiplication (double[][] mat1, double[][] mat2) {
+    public static double[][] elementWiseMultiplicationNew (double[][] mat1, double[][] mat2) {
         int rows = mat1.length;
         int cols = mat1[0].length;
 
@@ -145,11 +166,25 @@ public class Utils {
                 mat[i][j] = mat1[i][j] * mat2[i][j];
             }
         }
-
         return mat;
     }
 
-    public static double[][] multiplyMatByConstant (double num, double[][] matrix) {
+    public static void elementWiseMultiplication (double[][] mat1, double[][] mat2) {
+        int rows = mat1.length;
+        int cols = mat1[0].length;
+
+        if (mat2.length != rows || mat2[0].length != cols) {
+            throw new RuntimeException("Invalid dimensions in elementWiseMultiplication");
+        }
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                mat1[i][j] *= mat2[i][j];
+            }
+        }
+    }
+
+    public static double[][] multiplyMatByConstantNew (double num, double[][] matrix) {
         int rows = matrix.length;
         int cols = matrix[0].length;
 
@@ -160,6 +195,17 @@ public class Utils {
             }
         }
         return mat;
+    }
+
+    public static void multiplyMatByConstant (double num, double[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                matrix[i][j] *= num;
+            }
+        }
     }
 
     public static void matrixMultiplication (double[][] mat1, double[][] mat2, double[][] mat) {
@@ -180,7 +226,6 @@ public class Utils {
                 }
             }
         }
-
     }
 
     public static void matrixMultiplication (double[][] mat1, int[][] mat2, double[][] mat) {
@@ -201,7 +246,6 @@ public class Utils {
                 }
             }
         }
-
     }
 
     public static void softmax (double[][] matrix, double[][] mat) {
@@ -227,7 +271,6 @@ public class Utils {
                 mat[i][j] = Math.exp(matrix[i][j] - offset) / sum;
             }
         }
-
     }
 
     public static void sigmoid (double[][] matrix, double[][] mat) {
@@ -239,7 +282,6 @@ public class Utils {
                 mat[i][j] = 1/(1 + Math.exp(-matrix[i][j]));
             }
         }
-
     }
 
     public static double[][] sigmoidDerivative (double[][] activated) {
@@ -247,8 +289,7 @@ public class Utils {
         int cols = activated[0].length;
 
         double[][] mat = new double[rows][cols];
-        subtractMats(activated, elementWiseMultiplication(activated, activated), mat);
+        subtractMats(activated, elementWiseMultiplicationNew(activated, activated), mat);
         return mat;
     }
-
 }
