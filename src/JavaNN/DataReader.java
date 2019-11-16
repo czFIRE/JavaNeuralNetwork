@@ -5,21 +5,25 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 
-class DataReader {
+/**
+ * @author <a href="mailto:34507957+czFIRE@users.noreply.github.com">Petr Kadlec</a>
+ */
 
-    public final static int dataPerLine = 28 * 28;
-    public final static int dataClasses = 10;
+public class DataReader {
+
+    public static final int dataPerLine = 28 * 28;
+    public static final int dataClasses = 10;
 
     /**
      * Reads batchSize lines from data and labels and puts it into labeled points.
      */
-    static void readBatch(BufferedReader features, BufferedReader labels, int batchSize, LabelPoint[] labelPoints) {
+    public static void readBatch(BufferedReader features,BufferedReader labels,int batchSize,LabelPoint[] labelPoints) {
         String point;
         String label;
         int lineCount = 0;
 
         try {
-            while (lineCount < batchSize && (point = features.readLine()) != null && (label = labels.readLine()) != null) {
+            while (lineCount<batchSize && (point=features.readLine()) != null && (label=labels.readLine()) != null) {
                 String[] lineValues = point.split(",");
                 int[][] values = new int[dataPerLine][1];
                 for (int i = 0; i < dataPerLine; i++) {
@@ -40,7 +44,7 @@ class DataReader {
      * TODO
      * Writes array of ints into file.
      */
-    static void write(String file, int[][] answers) {
+    public static void write(String file, int[][] answers) {
         java.io.PrintWriter outfile = null;
 
         try {

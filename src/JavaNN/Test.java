@@ -1,18 +1,21 @@
 package JavaNN;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 
+/**
+ * @author <a href="mailto:34507957+czFIRE@users.noreply.github.com">Petr Kadlec</a>
+ */
+
 class Test {
 
-    Test() throws IOException {
+    Test() {
         //readerTest("D:\\Java\\JavaNeuralNetwork\\testData\\dataTest.txt", "D:\\Java\\JavaNeuralNetwork\\testData\\labelTest.txt");
         //printerTest("D:\\Java\\JavaNeuralNetwork\\testData\\test_print.csv", new int[][] {{1,2}, {1, 2, 3}});
-        //XORTest();
-        evaluateTest();
+        XORTest();
+        //evaluateTest();
     }
 
     private void readerTest (String data, String labels) throws IOException {
@@ -87,7 +90,7 @@ class Test {
     private void evaluateTest() {
         Mlp mlp = new Mlp(new int[] {2,2,2}, 0.1);
         mlp.weights.set(0, new double[][] {{0.1, 0.3}, {0.2, 0.4}});
-        mlp.weights.set(1, new double[][] {{0.1, 0.3}, {0.2, 0.4}});
+        mlp.weights.set(1, new double[][] {{0.2, 0.4}, {0.1, 0.3}});
         System.out.println(Arrays.deepToString(mlp.weights.get(0)) + Arrays.deepToString(mlp.weights.get(1)));
 
         int[][] inp = new int[2][1];

@@ -2,12 +2,16 @@ package JavaNN;
 
 import java.util.Arrays;
 
+/**
+ * @author <a href="mailto:34507957+czFIRE@users.noreply.github.com">Petr Kadlec</a>
+ */
+
 public class LabelPoint {
 
     private int[][] label;
     private int[][] features;
 
-    LabelPoint(int [][] label, int[][] features) {
+    public LabelPoint(int[][] label, int[][] features) {
         this.label = label;
         this.features = features;
     }

@@ -1,9 +1,10 @@
 package JavaNN;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
+
+/**
+ * @author <a href="mailto:34507957+czFIRE@users.noreply.github.com">Petr Kadlec</a>
+ */
 
 public class Utils {
     public static final int dataSetLength = 60000;
@@ -106,7 +107,7 @@ public class Utils {
 
     }
 
-    public static void subtractMats (double[][] mat1, double[][] mat2, double[][] mat) {  //could propably be merged with addMats
+    public static void subtractMats (double[][] mat1, double[][] mat2, double[][] mat) {
         int rows = mat1.length;
         int cols = mat1[0].length;
 
@@ -118,7 +119,7 @@ public class Utils {
 
     }
 
-    public static void subtractMats (double[][] mat1, int[][] mat2, double[][] mat) {  //could propably be merged with addMats
+    public static void subtractMats (double[][] mat1, int[][] mat2, double[][] mat) {
         int rows = mat1.length;
         int cols = mat1[0].length;
 
@@ -211,7 +212,7 @@ public class Utils {
 
         for (double[] matrixR: matrix) {
             for (int i = 0; i < cols; i++) {
-                if (offset < matrixR[i]) offset = matrixR[i];
+                if (offset < Math.abs(matrixR[i])) offset = matrixR[i];
             }
         }
 

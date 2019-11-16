@@ -4,23 +4,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author <a href="mailto:34507957+czFIRE@users.noreply.github.com">Petr Kadlec</a>
+ */
+
 public class Mlp {
 
     private int layers;
     private int[] architecture;
     private double learningRate;
 
-    List<double[][]> weights;
+    public List<double[][]> weights;
     private List<double[][]> biases;
     private List<double[][]> potentials;
-    List<double[][]> activations;
+    public List<double[][]> activations;
 
     private List<double[][]> diffPotentials;
     private List<double[][]> diffActivations;
     private List<double[][]> diffWeights;
     private List<double[][]> diffBiases;
 
-    Mlp(int[] architecture, double learningRate) {
+    public Mlp(int[] architecture, double learningRate) {
         this.layers = architecture.length - 1;
         this.architecture = architecture;
         this.learningRate = learningRate;
@@ -44,7 +48,7 @@ public class Mlp {
      * Evaluates neural network. Could be much nicer if input was considered as first element of activations
      * @param inputLayer vector of inputs
      */
-    void evaluate(int[][] inputLayer) {
+    public void evaluate(int[][] inputLayer) {
         Utils.matrixMultiplication(weights.get(0), inputLayer, potentials.get(0));
         Utils.addMats(potentials.get(0), biases.get(0), potentials.get(0));
         Utils.sigmoid(potentials.get(0), activations.get(0));
@@ -63,7 +67,7 @@ public class Mlp {
         Utils.softmax(potentials.get(layers - 1), activations.get(layers - 1));
     }
 
-    void layer3BackProp(int[][] inputLayer, int[][] label, int batchSize) { //label must be a matrix 1*10 matrix
+    public void layer3BackProp(int[][] inputLayer, int[][] label, int batchSize) { //label must be a matrix 1*10 matrix
         double[][] errorOutLayer = new double[architecture[layers]][1]; //edited
         Utils.subtractMats(activations.get(layers - 1), label, errorOutLayer);
 
@@ -75,7 +79,8 @@ public class Mlp {
 
         double[][] dActivations1 = new double[architecture[layers-1]][1];    //edited second arg
         Utils.matrixMultiplication(Utils.transposeMat(weights.get(layers-1)), errorOutLayer, dActivations1);
-        double[][] dPotentials1 = Utils.elementWiseMultiplication(dActivations1, Utils.sigmoidDerivative(activations.get(layers-2)));
+        double[][] dPotentials1 =
+                Utils.elementWiseMultiplication(dActivations1, Utils.sigmoidDerivative(activations.get(layers-2)));
 
         double[][] dWeights1 = new double[architecture[layers-1]][architecture[layers-2]];
         Utils.matrixMultiplication(dPotentials1, Utils.transposeMat(inputLayer), dWeights1);
@@ -84,18 +89,22 @@ public class Mlp {
         double[][] dBiases1 = Utils.multiplyMatByConstant(1d/batchSize, dPotentials1);
 
         //update weights and biases
-        Utils.subtractMats(weights.get(layers - 2), Utils.multiplyMatByConstant(learningRate, dWeights1), weights.get(layers - 2));
-        Utils.subtractMats(biases.get(layers - 2), Utils.multiplyMatByConstant(learningRate, dBiases1), biases.get(layers - 2));
+        Utils.subtractMats(weights.get(layers - 2),
+                Utils.multiplyMatByConstant(learningRate, dWeights1), weights.get(layers - 2));
+        Utils.subtractMats(biases.get(layers - 2),
+                Utils.multiplyMatByConstant(learningRate, dBiases1), biases.get(layers - 2));
 
-        Utils.subtractMats(weights.get(layers - 1), Utils.multiplyMatByConstant(learningRate, dWeights2), weights.get(layers - 1));
-        Utils.subtractMats(biases.get(layers - 1), Utils.multiplyMatByConstant(learningRate, dBiases2), biases.get(layers - 1));
+        Utils.subtractMats(weights.get(layers - 1),
+                Utils.multiplyMatByConstant(learningRate, dWeights2), weights.get(layers - 1));
+        Utils.subtractMats(biases.get(layers - 1),
+                Utils.multiplyMatByConstant(learningRate, dBiases2), biases.get(layers - 1));
     }
 
     public void backPropagate(double[][] inputLayer, int[][] label, int batchSize) {
 
     }
 
-    void verbosePrint() {
+    public void verbosePrint() {
         for (int i = 0; i < layers; i++) {
             System.out.println("Layer " + (i+1) + ":");
             System.out.println("Weights: " + Arrays.deepToString(weights.get(i)));
