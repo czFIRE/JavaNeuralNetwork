@@ -162,7 +162,7 @@ public class Mlp {
         Utils.matrixMultiplication(dPotentials1, Utils.transposeMat(inputLayer), dWeights1);
         dWeights1 = Utils.multiplyMatByConstantNew(1d/minibatchSize, dWeights1);
 
-        double[][] dBiases1 = new double[architecture[layers]][1];
+        double[][] dBiases1 = new double[architecture[layers - 1]][1];
         Utils.meanColumn(dPotentials1, dBiases1);
 
         //update weights and biases

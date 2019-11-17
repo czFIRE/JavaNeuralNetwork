@@ -12,10 +12,13 @@ import java.util.Arrays;
 class Test {
 
     Test() {
+        System.out.println("Seed: " + Utils.getSeed());
         //readerTest("D:\\Java\\JavaNeuralNetwork\\testData\\dataTest.txt", "D:\\Java\\JavaNeuralNetwork\\testData\\labelTest.txt");
         //printerTest("D:\\Java\\JavaNeuralNetwork\\testData\\test_print.csv", new int[][] {{1,2}, {1, 2, 3}});
         //XORTest();
-        evaluateTest();
+        batchXORTest();
+        //evaluateTest();
+        //batchEvaluateTest();
     }
 
     private void readerTest (String data, String labels) throws IOException {
@@ -77,7 +80,7 @@ class Test {
             }
 
             if (Double.isNaN(mlp.activations.get(1)[0][0])) {
-                System.out.println("Error: " + i);
+                System.out.println("Error - NaN: " + i);
                 return;
             }
             if (i % 100 == 0) {
@@ -85,21 +88,90 @@ class Test {
             }
         }
 
+
+
+    }
+
+    private void batchXORTest() {
+        Mlp mlp = new Mlp(new int[] {2,3,2}, 0.1d, 4, 0.9d);
+        System.out.println(Arrays.deepToString(mlp.weights.get(0)) + Arrays.deepToString(mlp.weights.get(1)));
+        int [][] inputs = new int[][] {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
+        int [][] labels = new int[][] {{0,1}, {1,0}, {1,0}, {0,1}};
+
+        inputs = Utils.transposeMat(inputs);
+        labels = Utils.transposeMat(labels);
+        for (int i = 0; i < 100000; i++) {
+            mlp.evaluate(inputs);
+            mlp.momentumLayer3BackProp(inputs, labels);
+
+            if (i % 100 == 0) {
+                System.out.println("Iteration: " + i + " " + Arrays.deepToString(Utils.transposeMat(mlp.activations.get(1))));
+            }
+
+
+        }
+
+        int [][] testInputs = new int[][] {{0, 1}, {0, 0}, {1, 0}, {1, 1}};
+        int [][] testLabels = new int[][] {{1,0}, {0,1}, {1,0}, {0,1}};
+
+        testInputs = Utils.transposeMat(testInputs);
+
+        mlp.evaluate(testInputs);
+        System.out.println("Result: " + Arrays.deepToString(Utils.transposeMat(mlp.activations.get(1))));
     }
 
     private void evaluateTest() {
         Mlp mlp = new Mlp(new int[] {2,2,2}, 0.1, 1, 0.9d);
         mlp.weights.set(0, new double[][] {{0.1, 0.3}, {0.2, 0.4}});
-        mlp.weights.set(1, new double[][] {{0.1, 0.3}, {0.2, 0.4}});
+        mlp.weights.set(1, new double[][] {{0.15, 0.35}, {0.25, 0.45}});
         System.out.println(Arrays.deepToString(mlp.weights.get(0)) + Arrays.deepToString(mlp.weights.get(1)));
 
         int[][] inp = new int[2][1];
         inp[0][0] = 1;
         inp[1][0] = 2;
 
+        //inp[0][0] = 2;
+        //inp[1][0] = 3;
+
         int[][] lab = new int[2][1];
+        //lab[0][0] = 0;
+        //lab[1][0] = 1;
+
+        lab[0][0] = 1;
+        lab[1][0] = 0;
+
+        mlp.evaluate(inp);
+        mlp.verbosePrint();
+
+        //inp[0][0] = 2;
+        //inp[1][0] = 3;
+        mlp.evaluate(inp);
+        //mlp.momentumLayer3BackProp(inp, lab);
+        //mlp.layer3BackProp(inp, lab);
+        mlp.verbosePrint();
+    }
+
+    private void batchEvaluateTest() {
+        Mlp mlp = new Mlp(new int[] {2,2,2}, 2, 2, 0.9d);
+        mlp.weights.set(0, new double[][] {{0.1, 0.3}, {0.2, 0.4}});
+        mlp.weights.set(1, new double[][] {{0.1, 0.3}, {0.2, 0.4}});
+        System.out.println(Arrays.deepToString(mlp.weights.get(0)) + Arrays.deepToString(mlp.weights.get(1)));
+
+        int[][] inp = new int[2][2];
+        inp[0][0] = 1;
+        inp[1][0] = 2;
+        inp[0][1] = 2;
+        inp[1][1] = 3;
+
+        //inp = Utils.transposeMat(inp);
+
+        int[][] lab = new int[2][2];
         lab[0][0] = 0;
         lab[1][0] = 1;
+        lab[0][1] = 1;
+        lab[1][1] = 0;
+
+        //lab = Utils.transposeMat(lab);
 
         mlp.evaluate(inp);
         mlp.verbosePrint();

@@ -69,10 +69,10 @@ public class Utils {
         return mat;
     }
 
-    public static double[][] transposeMat (int[][] matrix) {
+    public static int[][] transposeMat (int[][] matrix) {
         int rows = matrix.length;
         int cols = matrix[0].length;
-        double[][] mat = new double[cols][rows];
+        int[][] mat = new int[cols][rows];
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -112,6 +112,7 @@ public class Utils {
         int cols = matrix[0].length;
 
         for (int i = 0; i < rows; i++) {
+            mat[i][0] = 0;
             for (int j = 0; j < cols; j++) {
                 mat[i][0] += matrix[i][j];
             }
@@ -221,6 +222,7 @@ public class Utils {
 
         for (int i = 0; i < rows1; i++) {
             for (int j = 0; j < cols2; j++) {
+                mat[i][j] = 0;
                 for (int k = 0; k < cols1; k++) {
                     mat[i][j] += mat1[i][k] * mat2[k][j];
                 }
@@ -241,6 +243,7 @@ public class Utils {
 
         for (int i = 0; i < rows1; i++) {
             for (int j = 0; j < cols2; j++) {
+                mat[i][j] = 0;
                 for (int k = 0; k < cols1; k++) {
                     mat[i][j] += mat1[i][k] * mat2[k][j];
                 }
@@ -251,24 +254,27 @@ public class Utils {
     public static void softmax (double[][] matrix, double[][] mat) {
         int rows = matrix.length;
         int cols = matrix[0].length;
-        double sum = 0.0d;
-        double offset = 0.0d;
+        double sum;
+        double offset;
 
-        for (double[] matrixR: matrix) {
-            for (int i = 0; i < cols; i++) {
-                if (offset < Math.abs(matrixR[i])) offset = matrixR[i];
+        for (int j = 0; j < cols; j++) {
+            sum = 0.0d;
+            offset = 0.0d;
+            for (int i = 0; i < rows; i++) {
+                if (offset < Math.abs(matrix[i][j])) offset = matrix[i][j];
             }
-        }
 
-        for (double[] matrixR: matrix) {
-            for (int i = 0; i < cols; i++) {
-                sum += Math.exp(matrixR[i] - offset);
+            for (int i = 0; i < rows; i++) {
+                sum += Math.exp(matrix[i][j] - offset);
             }
-        }
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
+            for (int i = 0; i < rows; i++) {
+                /*if (Double.isInfinite(Math.exp(matrix[i][j] - offset)) && Double.isInfinite(sum)) {
+                    mat[i][j] = 1;
+                    continue;
+                }*/
                 mat[i][j] = Math.exp(matrix[i][j] - offset) / sum;
+                if (Double.isNaN(mat[i][j])) mat[i][j] = 1;
             }
         }
     }
