@@ -195,4 +195,7 @@ public class Mlp {
         }
     }
 
+    public void setLearningRate(double learningRate) {
+        this.learningRate = learningRate;
+    }
 }

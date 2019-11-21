@@ -11,47 +11,41 @@ import java.util.Arrays;
 
 class Test {
 
-    Test() {
+    Test() throws IOException {
         System.out.println("Seed: " + Utils.getSeed());
-        //readerTest("D:\\Java\\JavaNeuralNetwork\\testData\\dataTest.txt", "D:\\Java\\JavaNeuralNetwork\\testData\\labelTest.txt");
-        //printerTest("D:\\Java\\JavaNeuralNetwork\\testData\\test_print.csv", new int[][] {{1,2}, {1, 2, 3}});
+        readerTest("D:\\Java\\JavaNeuralNetwork\\testData\\dataTest.txt", "D:\\Java\\JavaNeuralNetwork\\testData\\labelTest.txt");
+        printerTest("D:\\Java\\JavaNeuralNetwork\\testData\\test_print.csv", new double[][][] {{{5,1,3,2}, {1, 2, 4, 3}}});
         //XORTest();
-        batchXORTest();
+        //batchXORTest();
         //evaluateTest();
         //batchEvaluateTest();
     }
 
-    private void readerTest (String data, String labels) throws IOException {
+    private void readerTest(String data, String labels) throws IOException {
         BufferedReader features = new BufferedReader(new FileReader(data));
         BufferedReader label = new BufferedReader(new FileReader(labels));
 
-        LabelPoint[] labelPoints = new LabelPoint[2];
-
+        int[][][] trainData = new int[2][784][2];
+        DataReader.readData(features, trainData, DataReader.dataPerLine, 2, 4);
         for (int i = 0; i < 2; i++) {
-            DataReader.readBatch(features, label, 2, labelPoints);
-            for (int j = 0; j < 2; j++) {
-                System.out.println(labelPoints[j]);
-            }
+            System.out.println("Batch " + i + ": " + Arrays.deepToString(Utils.transposeMat(trainData[i])));
         }
 
-        if (features != null) {
-            try {
-                features.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        int[][][] labelData = new int[2][10][2];
+        DataReader.readData(label, labelData, 1, 2, 4);
+        for (int i = 0; i < 2; i++) {
+            System.out.println("Batch " + i + ": " + Arrays.deepToString(Utils.transposeMat(labelData[i])));
         }
 
-        if (label != null) {
-            try {
-                features.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            features.close();
+            label.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    private void printerTest(String file, int[][] answers) {
+    private void printerTest(String file, double[][][] answers) {
         DataReader.write(file, answers);
     }
 
